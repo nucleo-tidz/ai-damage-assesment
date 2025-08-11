@@ -21,6 +21,25 @@ The goal is to combine **computer vision** for damage detection and **natural la
 
 ---
 
+## Architecture
+```mermaid
+graph LR
+    A[User Uploads Image] --> B[Damage Detection]
+    B --> C[Draw Bounding Rectangles]
+    C --> D[Annotated Image]
+    D --> E[Multimodal Agent]
+    E --> F[Damage Summary]
+    
+    subgraph Azure Custom Vision
+        B
+        C
+    end
+
+    subgraph Azure Open AI
+        E
+    end
+```
+---
 ## Input
 <img width="1022" height="685" alt="image" src="https://github.com/user-attachments/assets/b15b3266-d993-44ad-a727-574d32f23601" />
 
@@ -67,22 +86,4 @@ The goal is to combine **computer vision** for damage detection and **natural la
 - Repaint with marine-grade, anti-corrosive paint.  
 - Monitor periodically for recurrence or spreading.
 
----
 
-## 🖼 Architecture
-```mermaid
-graph LR
-    A[User Uploads Image] --> B[Damage Detection]
-    B --> C[Draw Bounding Rectangles]
-    C --> D[Annotated Image]
-    D --> E[Multimodal LLM]
-    E --> F[Damage Summary]
-    
-    subgraph Detection
-        B
-        C
-    end
-
-    subgraph Analysis
-        E
-    end
