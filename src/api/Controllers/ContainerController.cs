@@ -28,12 +28,12 @@
 
             var fileName = $"{Guid.NewGuid()}.jpg";
             var filePath = Path.Combine("C:\\Apps\\Misc\\", fileName);
-             System.IO.File.WriteAllBytes(filePath, detail.DamageImage);
+            System.IO.File.WriteAllBytes(filePath, detail.DamageImage);
             var imageId = Guid.NewGuid().ToString();
             var response = new ContainerResponseModel
             {
                 Damages = detail.Damage,
-                ImageId = imageId 
+                ImageId = imageId
             };
 
             return Ok(response);

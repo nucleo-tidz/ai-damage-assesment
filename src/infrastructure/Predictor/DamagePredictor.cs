@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
+﻿using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models;
 using Microsoft.Extensions.Options;
 using System.Drawing;
@@ -11,7 +10,7 @@ namespace infrastructure.Predictor
     {
         public async Task<byte[]> GetDamage(byte[] containerImage)
         {
-          
+
             var visionClient = new CustomVisionPredictionClient(new ApiKeyServiceClientCredentials(options.Value.PredictionKey))
             {
                 Endpoint = options.Value.Endpoint
@@ -37,7 +36,7 @@ namespace infrastructure.Predictor
         {
 
             using var image = (Bitmap)System.Drawing.Image.FromStream(new MemoryStream(containerImage));
-          
+
             using var graphics = Graphics.FromImage(image);
             foreach (var box in boundingBox)
             {

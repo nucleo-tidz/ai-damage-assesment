@@ -14,7 +14,7 @@ namespace infrastructure.Agents
         public (Agent, PersistentAgentsClient) GetAzureAgent(string agentId)
         {
             //DO NO USE THIS CODE IN PRODUCTION. USE RBAC INSTEAD FOR AUTHENTICATION
-            AIProjectClient projectClient = new AIProjectClient(new Uri(configuration["AgentProjectEndpoint"]), new DefaultAzureCredential(
+            AIProjectClient projectClient = new(new Uri(configuration["AgentProjectEndpoint"]), new DefaultAzureCredential(
                 new DefaultAzureCredentialOptions
                 {
                     ExcludeVisualStudioCredential = true,
@@ -37,9 +37,9 @@ namespace infrastructure.Agents
             };
             return (agent, agentsClient);
         }
-        public void UpdateAgent(string agentId,object schema)
+        public void UpdateAgent(string agentId, object schema)
         {
-            AIProjectClient projectClient = new AIProjectClient(new Uri(configuration["AgentProjectEndpoint"]), new DefaultAzureCredential(
+            AIProjectClient projectClient = new(new Uri(configuration["AgentProjectEndpoint"]), new DefaultAzureCredential(
                 new DefaultAzureCredentialOptions
                 {
                     ExcludeVisualStudioCredential = true,

@@ -6,7 +6,6 @@
     using Microsoft.SemanticKernel.Agents.AzureAI;
     using Microsoft.SemanticKernel.ChatCompletion;
     using model;
-    using ModelContextProtocol.Client;
     using System.Text.Json;
     using System.Threading.Tasks;
     internal class ContainerAgent(Kernel _kernel, IConfiguration configuration) : AgentBase(_kernel, configuration), IContainerAgent
@@ -45,7 +44,7 @@
             string agentReply = string.Empty;
             var agent = base.GetAzureAgent(configuration["ContainerAgentId"]);
             AgentThread thread = new AzureAIAgentThread(agent.Item2);
-            ChatMessageContentItemCollection messages = new ChatMessageContentItemCollection();
+            ChatMessageContentItemCollection messages = new();
             messages.Add(new ImageContent(containerImage, "image/jpeg"));
             ChatMessageContent chatMessageContent = new(AuthorRole.User, messages);
             await foreach (ChatMessageContent response in agent.Item1.InvokeAsync(chatMessageContent, thread))
