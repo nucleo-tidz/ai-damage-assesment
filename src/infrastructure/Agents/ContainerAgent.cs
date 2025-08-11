@@ -5,12 +5,42 @@
     using Microsoft.SemanticKernel.Agents;
     using Microsoft.SemanticKernel.Agents.AzureAI;
     using Microsoft.SemanticKernel.ChatCompletion;
+    using model;
     using ModelContextProtocol.Client;
+    using System.Text.Json;
     using System.Threading.Tasks;
     internal class ContainerAgent(Kernel _kernel, IConfiguration configuration) : AgentBase(_kernel, configuration), IContainerAgent
     {
+        public object responseFormat = new
+        {
+            type = "json_schema",
+            json_schema = new
+            {
+                name = "DamageReport",
+                schema = new
+                {
+                    type = "object",
+                    properties = new
+                    {
+                        Damages = new
+                        {
+                            type = "object",
+                            properties = new
+                            {
+                                DamageType = new { type = "string" },
+                                DamageDescription = new { type = "string" },
+                                PotentialImplications = new { type = "array", items = new { type = "string" } },
+                                RecommendedActions = new { type = "array", items = new { type = "string" } }
+                            },
+                            required = new[] { "DamageType", "DamageDescription" }
+                        }
+                    },
+                    required = new[] { "Damages" }
+                }
+            }
+        };
 
-        public async Task<string> Execute(byte[] containerImage)
+        public async Task<AgentResponse> Execute(byte[] containerImage)
         {
             string agentReply = string.Empty;
             var agent = base.GetAzureAgent(configuration["ContainerAgentId"]);
@@ -22,7 +52,7 @@
             {
                 agentReply = agentReply + response.Content;
             }
-            return agentReply;
+            return JsonSerializer.Deserialize<AgentResponse>(agentReply);
         }
     }
 }

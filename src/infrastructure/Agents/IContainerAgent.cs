@@ -1,9 +1,10 @@
 ﻿namespace infrastructure.Agents
 {
+    using model;
     using System.Threading.Tasks;
 
     public interface IContainerAgent
     {
-        Task<string> Execute(byte[] containerImage);
+        Task<AgentResponse> Execute(byte[] containerImage);
     }
 }

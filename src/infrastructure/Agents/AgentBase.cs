@@ -1,9 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Azure.AI.Agents.Persistent;
+﻿using Azure.AI.Agents.Persistent;
 using Azure.AI.Projects;
 using Azure.Identity;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
@@ -11,7 +8,7 @@ using Microsoft.SemanticKernel.Agents.AzureAI;
 
 namespace infrastructure.Agents
 {
-    
+
     public class AgentBase(Kernel kernel, IConfiguration configuration)
     {
         public (Agent, PersistentAgentsClient) GetAzureAgent(string agentId)
@@ -32,7 +29,6 @@ namespace infrastructure.Agents
                     ExcludeWorkloadIdentityCredential = true,
 
                 }));
-
             PersistentAgentsClient agentsClient = projectClient.GetPersistentAgentsClient();
             PersistentAgent definition = agentsClient.Administration.GetAgent(agentId);
             AzureAIAgent agent = new(definition, agentsClient)
@@ -41,5 +37,26 @@ namespace infrastructure.Agents
             };
             return (agent, agentsClient);
         }
+        public void UpdateAgent(string agentId,object schema)
+        {
+            AIProjectClient projectClient = new AIProjectClient(new Uri(configuration["AgentProjectEndpoint"]), new DefaultAzureCredential(
+                new DefaultAzureCredentialOptions
+                {
+                    ExcludeVisualStudioCredential = true,
+                    ExcludeEnvironmentCredential = true,
+                    ExcludeManagedIdentityCredential = true,
+                    ExcludeInteractiveBrowserCredential = false,
+                    ExcludeAzureCliCredential = false,
+                    ExcludeAzureDeveloperCliCredential = true,
+                    ExcludeAzurePowerShellCredential = true,
+                    ExcludeSharedTokenCacheCredential = true,
+                    ExcludeVisualStudioCodeCredential = true,
+                    ExcludeWorkloadIdentityCredential = true,
+
+                }));
+            PersistentAgentsClient agentsClient = projectClient.GetPersistentAgentsClient();
+            agentsClient.Administration.UpdateAgent(agentId, responseFormat: BinaryData.FromObjectAsJson(schema));
+        }
     }
+
 }

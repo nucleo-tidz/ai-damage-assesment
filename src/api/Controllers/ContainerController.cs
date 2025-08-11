@@ -32,7 +32,7 @@
             var imageId = Guid.NewGuid().ToString();
             var response = new ContainerResponseModel
             {
-                Analysis = detail.Analysis,
+                Damages = detail.Damage,
                 ImageId = imageId 
             };
 

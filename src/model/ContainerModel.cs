@@ -3,6 +3,7 @@
     public class ContainerModel
     {
         public byte[] DamageImage { get; set; }
-        public string Analysis { get; set; }
+
+        public AgentResponse Damage { get; set; }
     }
 }

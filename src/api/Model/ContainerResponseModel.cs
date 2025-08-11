@@ -1,10 +1,11 @@
-﻿namespace api.Model
+﻿using model;
+
+namespace api.Model
 {
     public class ContainerResponseModel
     {
-        public string Analysis { get; set; }
+        public AgentResponse Damages { get; set; }
         public string  ImageId { get; set; }
-
         
     }
 }

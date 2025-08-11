@@ -9,18 +9,18 @@
         public async Task<ContainerModel> GetContainerDamage(byte[] containerImage)
         {
             byte[] processedImage = await damagePredictor.GetDamage(containerImage);
-            if(processedImage is null )
+            if (processedImage is null)
             {
                 return new ContainerModel
                 {
-                    Analysis = "No damage detected",
+                    Damage = new AgentResponse { Damages = new[] { new Damage { DamageDescription = "No Damage Detected" } } },
                     DamageImage = containerImage
                 };
             }
-            string agentReply= await containerAgent.Execute(processedImage);
+            var agentReply = await containerAgent.Execute(processedImage);
             return new ContainerModel
             {
-                Analysis = agentReply,
+                Damage = agentReply,
                 DamageImage = processedImage
             };
         }
