@@ -1,4 +1,4 @@
-# AI-Powered Container Damage Detection & Summarization
+# AI-Powered Shipping Container Damage Detection & Summarization
 
 ## 📌 Description
 This project uses **Azure Custom Vision** to detect and localize container damage in images. Detected damage areas are highlighted with rectangles, and the annotated image is then passed to a **Multimodal Large Language Model (LLM)** (Azure OpenAI GPT-4.1) to generate a technical summary of the damage.  
