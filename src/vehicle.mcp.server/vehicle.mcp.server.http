@@ -1,6 +1,0 @@
-@vehicle.mcp.server_HostAddress = http://localhost:5295
-
-GET {{vehicle.mcp.server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

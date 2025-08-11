@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "model", "src\model\model.cs
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{DD84CF62-5B78-4C6D-A8BA-FD98BBEBE9E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vehicle.mcp.server", "src\vehicle.mcp.server\vehicle.mcp.server.csproj", "{E7976DC3-BF43-4890-9446-B634B4427D66}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -46,10 +44,6 @@ Global
 		{DD84CF62-5B78-4C6D-A8BA-FD98BBEBE9E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD84CF62-5B78-4C6D-A8BA-FD98BBEBE9E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD84CF62-5B78-4C6D-A8BA-FD98BBEBE9E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7976DC3-BF43-4890-9446-B634B4427D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7976DC3-BF43-4890-9446-B634B4427D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7976DC3-BF43-4890-9446-B634B4427D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7976DC3-BF43-4890-9446-B634B4427D66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using infrastructure.Agents;
-using infrastructure.Factory;
-
+﻿using infrastructure.Agents;
+using infrastructure.Predictor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace infrastructure
 {
@@ -16,8 +14,9 @@ namespace infrastructure
         {
             services
                 .AddSemanticKernel(configuration).
-                AddTransient<IVehicleAgent, VehicleAgent>().
-                AddTransient<IModelContextPrtocolFactory, ModelContextPrtocolFactory>();
+                AddTransient<IContainerAgent, ContainerAgent>()
+                  .AddTransient<IDamagePredictor, DamagePredictor>()
+            .Configure<CustomVisionSettings>(configuration.GetSection("CustomVision"));
             return services;
         }
         public static IServiceCollection AddSemanticKernel(this IServiceCollection services, IConfiguration configuration)

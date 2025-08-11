@@ -6,7 +6,7 @@ namespace service
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddTransient<IVehicleService, VehicleService>();
+            services.AddTransient<IContainerService, ContainerService>();
             return services;
         }
     }
