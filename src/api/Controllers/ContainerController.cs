@@ -25,11 +25,11 @@
 
 
             var detail = await containerService.GetContainerDamage(fileBytes);
-
-            var fileName = $"{Guid.NewGuid()}.jpg";
+            var imageId = Guid.NewGuid().ToString();
+            var fileName = $"{imageId}.jpg";
             var filePath = Path.Combine("C:\\Apps\\Misc\\", fileName);
             System.IO.File.WriteAllBytes(filePath, detail.DamageImage);
-            var imageId = Guid.NewGuid().ToString();
+          
             var response = new ContainerResponseModel
             {
                 Damages = detail.Damage,

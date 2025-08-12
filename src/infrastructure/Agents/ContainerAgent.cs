@@ -23,15 +23,19 @@
                     {
                         Damages = new
                         {
-                            type = "object",
-                            properties = new
+                            type = "array",
+                            items = new
                             {
-                                DamageType = new { type = "string" },
-                                DamageDescription = new { type = "string" },
-                                PotentialImplications = new { type = "array", items = new { type = "string" } },
-                                RecommendedActions = new { type = "array", items = new { type = "string" } }
-                            },
-                            required = new[] { "DamageType", "DamageDescription" }
+                                type = "object",
+                                properties = new
+                                {
+                                    DamageType = new { type = "string" },
+                                    DamageDescription = new { type = "string" },
+                                    PotentialImplications = new { type = "array", items = new { type = "string" } },
+                                    RecommendedActions = new { type = "array", items = new { type = "string" } }
+                                },
+                                required = new[] { "DamageType", "DamageDescription" }
+                            }
                         }
                     },
                     required = new[] { "Damages" }
@@ -39,9 +43,11 @@
             }
         };
 
+
         public async Task<AgentResponse> Execute(byte[] containerImage)
         {
             string agentReply = string.Empty;
+            //base.UpdateAgent(configuration["ContainerAgentId"], responseFormat);
             var agent = base.GetAzureAgent(configuration["ContainerAgentId"]);
             AgentThread thread = new AzureAIAgentThread(agent.Item2);
             ChatMessageContentItemCollection messages = new();
