@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Workshop Inspection Dashboard</title>
+<title>Workshop Container Inspection</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,900" rel="stylesheet">
@@ -10,210 +10,215 @@
 <style>
 body {
     margin: 0; padding: 0;
-    background: #23272a;
+    background: #f5f6fa;
     font-family: 'Roboto', sans-serif;
-    color: #e0e0e0;
+    color: #25313c;
     min-height: 100vh;
 }
 .header {
-    background: linear-gradient(90deg,#303841 50%,#d32f2f 100%);
-    padding: 22px 0 18px 48px;
-    font-size: 2.1em;
+    background: linear-gradient(90deg,#f8fafc 60%,#ffe5e5 100%);
+    padding: 24px 0 18px 48px;
+    font-size: 2em;
     font-family: 'Roboto',sans-serif;
     font-weight:900;
     letter-spacing: 2px;
-    color: #fff;
-    text-shadow: 0 3px 18px #1119;
-    box-shadow: 0 5px 24px #0003;
+    color: #ad2020;
+    box-shadow: 0 3px 18px #e7e7e7b9;
     display: flex; align-items: center;
+    border-bottom: 1.5px solid #ebebeb;
 }
 .header .material-icons {
-    font-size: 1.05em;
-    margin-right: 12px;
-    color: #ffd600;
+    font-size: 1.1em;
+    margin-right: 16px;
+    color: #ff9800;
 }
 
 .app-container {
     display: flex;
     flex-direction: row;
+    min-height: 76vh;
 }
 .sidebar {
-    background: #1b1e22;
-    padding: 42px 18px 24px 24px;
-    width: 270px;
+    background: #f2f4f7;
+    padding: 38px 20px 20px 30px;
+    width: 250px;
     min-height: 80vh;
-    border-right: 2px solid #353636;
+    border-right: 1.7px solid #e2e2e2;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+    box-shadow: 1px 0 10px #e0e0e0;
 }
 .menu-title {
-    color: #ffd600;
-    font-size: 1.1em;
-    margin-bottom: 16px;
+    color: #ce412b;
+    font-size: 1.15em;
+    margin-bottom: 18px;
     font-weight:700;
     letter-spacing: 1.5px;
+    text-transform: uppercase;
 }
 .upload-btn {
-    padding: 14px 28px;
-    margin-bottom: 38px;
-    font-size: 1.08em;
-    border-radius: 6px;
-    background: #d32f2f;
+    padding: 13px 30px;
+    margin-bottom: 40px;
+    font-size: 1.09em;
+    border-radius: 7px;
+    background: #ff6868;
     color: #fff;
     font-weight: bold;
     border: none;
-    box-shadow: 0 2px 8px #a8272740;
+    box-shadow: 0 2px 7px #ffcccc90;
     cursor:pointer;
     transition:background .18s;
     user-select:none;
     outline:none;
 }
 .upload-btn:hover, .upload-btn:focus {
-    background: #b71c1c;
+    background: #ce412b;
 }
 #sidebar-upload-input { display:none; }
-
 .status-panel {
-    padding: 13px 0;
-    color: #bdbdbd;
-    font-size: 1em;
+    padding: 10px 0 5px 0;
+    color: #999;
+    font-size: 1.05em;
 }
-
 .status-label {
     font-weight:700;
-    color:#ffd600;
+    color:#ff9800;
     margin-right:8px;
 }
 .hr {
-    width: 80%;
-    margin: 16px 0 12px 0;
-    border-top: 1px solid #333;
+    width: 78%;
+    margin: 15px 0 12px 0;
+    border-top: 1px solid #e4e4e4;
 }
-
 .results-container {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 32px clamp(10px,5vw,48px);
-    gap: 30px;
+    padding: 38px clamp(8px,5vw,42px);
+    gap: 32px;
 }
 .images-row {
     display: flex;
-    gap: 32px;
-    margin-bottom:12px;
+    gap: 28px;
+    margin-bottom:14px;
 }
 .image-panel {
-    flex:1;
-    background: #282828;
-    border-radius: 12px;
-    padding: 24px 18px 18px 18px;
-    box-shadow: 0 4px 16px #0002;
-    border:1.2px solid #363535;
+    flex:1 1 0;
+    background: #fff;
+    border-radius: 13px;
+    padding: 18px 16px 14px 16px;
+    box-shadow: 0 3px 22px #e4e4e4c8;
+    border: 1.5px solid #ebebeb;
     display: flex; flex-direction: column; align-items: center;
 }
 .panel-label {
-    font-size: 1.08em;
-    color: #ffd600;
+    font-size: 1.12em;
+    color: #ce412b;
     font-weight:700;
-    margin-bottom: 12px;
-    letter-spacing: 0.5px;
+    margin-bottom: 13px;
+    letter-spacing: .5px;
     text-align:center;
+    text-transform:uppercase;
 }
 .img-container {
     width: 100%;
-    height: 45vh;
-    min-height: 240px;
-    max-height: 55vh;
-    background: repeating-linear-gradient(
-        135deg,
-        #24282b,
-        #323639 6px,
-        #23272a 10px,
-        #23272a 16px
-    );
-    border:2.5px solid #bdbdbd32;
-    border-radius: 8px;
+    height: 50vh;
+    min-height: 210px;
+    max-height: 53vh;
+    background: #f6f5fa;
+    border-radius: 11px;
+    border:1px solid #ebe1e1;
     display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 16px #fbe7e7a8;
     overflow:hidden;
+    margin-bottom:8px;
 }
 img#processed-img, img#damaged-img {
-    width: auto; height: 96%;
-    max-width: 97%; max-height: 98%;
-    border-radius: 6px;
-    box-shadow: 0 4px 15px #111a;
+    width: auto; height: 93%;
+    max-width: 98%; max-height: 97%;
+    border-radius: 8px;
+    box-shadow: 0 3px 9px #c89f9f36;
     margin:auto;
-    background:#202223;
+    background:#ede8e4;
 }
 #image-placeholder, #damaged-image-placeholder {
-    color: #b0b3b5;
-    font-size: 1.03em;
+    color: #bcb7b7;
+    font-size: 1.08em;
     font-style: italic;
     margin:auto;
 }
 .summary-title {
-    font-size: 1.35em;
+    font-size: 1.30em;
     font-weight:800;
-    color: #fff;
-    letter-spacing:0.5px;
-    margin-bottom: 7px;
+    color: #222;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display:flex;align-items:center;
+}
+.summary-title .material-icons {
+    color:#ff6868;margin-right:10px;font-size:1.1em;vertical-align:middle;
 }
 .damage-summary-stack {
     width: 100%;
-    margin-top:8px;
+    margin-top:7px;
 }
 .damage-card {
-    background: #26272d;
-    border-radius: 13px;
-    padding: 16px 22px 14px 19px;
-    margin-bottom: 18px;
-    box-shadow: 0 6px 18px #150c0ca8;
-    border-left: 7px solid #d32f2f;
-    border-bottom: 2.5px solid #ffd60040;
-    color: #e7e6e1;
-    transition:box-shadow 0.2s;
+    background: #fff;
+    border-radius: 12px;
+    padding: 19px 26px 16px 23px;
+    margin-bottom: 17px;
+    box-shadow: 0 2px 18px #f1bababb;
+    border-left: 5px solid #ff6868;
+    border-bottom: 2px solid #ffe2e2;
+    color: #313133;
+    transition: box-shadow 0.18s;
     position:relative;
 }
 .damage-card:hover {
-    box-shadow: 0 6px 42px #d32f2f1a;
-    background:#221e1b;
+    box-shadow: 0 10px 22px #ffcccc55;
+    background:#fff9f9;
 }
 .damage-header {
-    font-size: 1.15em;
-    font-weight: 900;
-    color: #fff;
-    margin-bottom: 7px;
+    font-size: 1.17em;
+    font-weight: 800;
+    color: #ff6868;
+    margin-bottom: 9px;
     display: flex; align-items: center;
 }
 .damage-type {
-    background: #d32f2f;
+    background: #ff6868;
     color: #fff;
-    padding: 2px 15px 2px 15px;
-    border-radius: 13px;
-    font-size: 0.93em;
+    padding: 3.5px 15px;
+    border-radius: 11px;
+    font-size: 1.01em;
     margin-right: 13px;
-    font-weight: bold;
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
     letter-spacing: 1px;
-    box-shadow:0 1px 11px #d32f2f1a;
+    box-shadow:0 1px 4px #ffb1b145;
+    display:inline-block;
 }
 .damage-description {
     font-style: italic;
     margin-bottom: 12px;
-    color: #ffcdd2;
+    color: #ad4343;
 }
 .damage-details strong {
     display: block;
     margin-top: 10px;
-    margin-bottom: 4px;
-    color: #ffd600;
+    margin-bottom: 3px;
+    color: #ce412b;
     font-size: 1.05em;
     font-weight:700;
 }
 .damage-details ul {
-    margin-left: 18px;
+    margin-left: 19px;
+    margin-bottom: 0;
     list-style-type: disc;
-    color: #fff9c4;
+    color: #223248;
     padding-left: 0;
 }
 .damage-details ul li {
@@ -221,51 +226,49 @@ img#processed-img, img#damaged-img {
     line-height:1.5em;
 }
 .no-damage {
-    color: #ffebee;
+    color: #c6aaab;
     font-style: italic;
 }
 ::-webkit-scrollbar {
     width: 9px;
-    background: #282c34;
+    background: #f2f4f7;
 }
 ::-webkit-scrollbar-thumb {
-    background: #bdbdbd2d;
-    border-radius: 12px;
+    background: #dac7c7bc;
+    border-radius: 11px;
 }
 @media (max-width:1200px) {
     .sidebar { display:none;}
     .results-container { padding:16px 2vw;}
-    .main-section { flex-direction:column; height:auto; }
-    .images-row { flex-direction:column; gap:16px;}
+    .images-row { flex-direction:column; gap:13px;}
 }
-
 @media (max-width:700px) {
-    .header { font-size: 1.05em; padding:12px 2vw;}
-    .results-container { padding:8px 1vw;}
-    .images-row { gap:8px;}
-    .damage-card { padding: 12px 6vw 9px 4vw;}
+    .header { font-size: 1.03em; padding:12px 2vw;}
+    .results-container { padding:7px 1vw;}
+    .images-row { gap:6px;}
+    .damage-card { padding: 10px 7vw 8px 4vw;}
 }
 </style>
 </head>
 <body>
-<div class="header"><span class="material-icons">build_circle</span>Workshop Container Inspection</div>
+<div class="header"><span class="material-icons">precision_manufacturing</span>Workshop Container Inspection</div>
 <div class="app-container">
     <div class="sidebar">
         <div class="menu-title">Quick Actions</div>
-        <button class="upload-btn" onclick="document.getElementById('sidebar-upload-input').click();">Choose Container Image</button>
+        <button class="upload-btn" onclick="document.getElementById('sidebar-upload-input').click();">Upload Image</button>
         <input type="file" accept="image/*" id="sidebar-upload-input">
         <div class="hr"></div>
         <div class="status-panel">
             <span class="status-label">Status:</span>
             <span id="upload-status">Waiting for image...</span>
         </div>
-        <div style="margin-top:30px; color:#bdbdbd83; font-size:.93em;">Powered by AI + Vision &middot; Last updated: August 2025</div>
+        <div style="margin-top:30px; color:#ad4343b7; font-size:.93em;">Powered by AI + Vision</div>
     </div>
     <div class="results-container">
         <div class="images-row">
             <!-- Processed Image -->
             <div class="image-panel">
-                <div class="panel-label">Uploaded Image</div>
+                <div class="panel-label">Processed Image</div>
                 <div class="img-container">
                     <img id="processed-img" src="" alt="Processed Image" style="display:none;">
                     <span id="image-placeholder">Upload a container image to see result.</span>
@@ -282,7 +285,7 @@ img#processed-img, img#damaged-img {
         </div>
         <!-- Summary of Damage -->
         <div>
-            <div class="summary-title"><span class="material-icons" style="vertical-align:middle;font-size:1.1em;">dangerous</span>
+            <div class="summary-title"><span class="material-icons" style="vertical-align:middle;font-size:1.1em;">engineering</span>
                 Summary of Damage
             </div>
             <div id="damage-summary" class="damage-summary-stack">
@@ -300,7 +303,7 @@ function formatSummary(damages){
         output += `
         <div class="damage-card">
             <div class="damage-header">
-                <span class="material-icons" style="vertical-align:middle;margin-right:6px;color:#d32f2f;">report_problem</span>
+                <span class="material-icons" style="vertical-align:middle;margin-right:6px;color:#ff6868;">report_problem</span>
                 <span class="damage-type">${damage.damageType}</span>
             </div>
             <p class="damage-description">${damage.damageDescription}</p>
@@ -314,13 +317,7 @@ function formatSummary(damages){
     });
     return output;
 }
-
 $(document).ready(function(){
-    // Sync both upload buttons
-    $(".upload-btn, .custom-file-label").on('keypress click', function(e){
-        if (e.type === "click" || e.key===" " || e.key==="Enter")
-            $("#sidebar-upload-input").click();
-    });
 
     $("#sidebar-upload-input").on('change', function(){
         $("#upload-status").text("Processing...");
@@ -350,8 +347,6 @@ $(document).ready(function(){
             success: function(res) {
                 $("#upload-status").text("Analysis complete.");
                 $('#damage-summary').html(formatSummary(res.damages && res.damages.damages));
-
-                // Damaged Image from backend using imageId
                 if(res.imageId){
                     let damagedImgUrl = `https://localhost:7162/api/Container/download/${res.imageId}`;
                     $("#damaged-img").attr('src', damagedImgUrl).show();
