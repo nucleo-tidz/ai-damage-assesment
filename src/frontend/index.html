@@ -60,6 +60,16 @@
             border-right: 2px solid #e5e7ea;
             background: #f6f9fd;
         }
+        .right-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 2px solid #e5e7ea;
+        }
+        .right-box:last-child {
+            border-right: none; /* Remove border for last column */
+        }
         .section-title {
             font-weight: 700;
             font-size: 1.4em;
@@ -71,23 +81,24 @@
             font-size: 1.05em;
             color: #222b38;
             line-height: 1.6;
+            height: 460px;
+            overflow-y: auto;
+            padding-right: 10px;
         }
-        .right-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        #processed-img {
+        #processed-img, #damaged-img {
             width: 95%;
-            max-width: 380px;
+            max-width: 280px;
             height: auto;
             border: 2px solid #e5e7ea;
             border-radius: 10px;
             background: #f1f5fa;
             box-shadow: 0 2px 10px rgba(44, 62, 80, 0.05);
+            margin-bottom: 10px;
         }
         /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .container-main { max-width: 97vw; }
+        }
         @media (max-width: 900px) {
             .lower-section {
                 flex-direction: column;
@@ -111,7 +122,7 @@
             <label class="custom-file-label" for="image-upload">Choose Container Image</label>
             <input type="file" id="image-upload" accept="image/*">
         </div>
-        <!-- Lower Section: Summary & Processed Image -->
+        <!-- Lower Section: Summary, Processed Image, Damaged Image -->
         <div class="lower-section">
             <!-- Summary -->
             <div class="left-box">
@@ -123,67 +134,86 @@
             <!-- Processed Image -->
             <div class="right-box">
                 <div class="section-title">Processed Image</div>
-                <img id="processed-img" src="" alt="Processed Image" style="display:none;">
+                <img id="processed-img" src="" alt="Original Image" style="display:none;">
                 <span id="image-placeholder" style="color:#8899a7;">Upload an image to view result here.</span>
+            </div>
+            <!-- Damaged Image -->
+            <div class="right-box">
+                <div class="section-title">Damaged Image</div>
+                <img id="damaged-img" src="" alt="Damaged Image" style="display:none;">
+                <span id="damaged-image-placeholder" style="color:#8899a7;">Original damaged image will be shown here.</span>
             </div>
         </div>
     </div>
     <!-- jQuery Functionality -->
     <script>
-   $(document).ready(function(){
+    $(document).ready(function(){
+        $("#image-upload").on('change', function(e){
+            $('#damage-summary').html('<em>Processing... Please wait.</em>');
+            $('#image-placeholder').hide();
+            $("#processed-img").hide();
+            $('#damaged-image-placeholder').hide();
+            $("#damaged-img").hide();
 
-    $("#image-upload").on('change', function(e){
-        $('#damage-summary').html('<em>Processing... Please wait.</em>');
-        $('#image-placeholder').hide();
-        $("#processed-img").hide();
+              var reader = new FileReader();
+                    reader.onload = function(e){
+                        $("#processed-img").attr('src', e.target.result).show();
+                    }
+                    reader.readAsDataURL($("#image-upload")[0].files[0]);
 
-        var formData = new FormData();
-        formData.append('file', this.files[0]);
+            var formData = new FormData();
+            formData.append('file', this.files[0]);
 
-        $.ajax({
-            url: 'https://localhost:7162/api/Container/upload',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(res) {
-                let output = '';
-                if (res.damages && res.damages.damages && res.damages.damages.length > 0) {
-                    output += '<ul>';
-                    res.damages.damages.forEach(function(damage){
-                        output += `<li style="margin-bottom:20px;">
-                            <strong>Type:</strong> ${damage.damageType}<br>
-                            <strong>Description:</strong> ${damage.damageDescription}<br>
-                            <strong>Potential Implications:</strong>
-                            <ul>${damage.potentialImplications.map(i => `<li>${i}</li>`).join('')}</ul>
-                            <strong>Recommended Actions:</strong>
-                            <ul>${damage.recommendedActions.map(a => `<li>${a}</li>`).join('')}</ul>
-                        </li>`;
-                    });
-                    output += '</ul>';
-                } else {
-                    output = "<span style='color:orange;'>No damages detected or response format error.</span>";
+            $.ajax({
+                url: 'https://localhost:7162/api/Container/upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(res) {
+                    // 1. Damage Summary
+                    let output = '';
+                    if (res.damages && res.damages.damages && res.damages.damages.length > 0) {
+                        output += '<ul>';
+                        res.damages.damages.forEach(function(damage){
+                            output += `<li style="margin-bottom:20px;">
+                                <strong>Type:</strong> ${damage.damageType}<br>
+                                <strong>Description:</strong> ${damage.damageDescription}<br>
+                                <strong>Potential Implications:</strong>
+                                <ul>${damage.potentialImplications.map(i => `<li>${i}</li>`).join('')}</ul>
+                                <strong>Recommended Actions:</strong>
+                                <ul>${damage.recommendedActions.map(a => `<li>${a}</li>`).join('')}</ul>
+                            </li>`;
+                        });
+                        output += '</ul>';
+                    } else {
+                        output = "<span style='color:orange;'>No damages detected or response format error.</span>";
+                    }
+                    $('#damage-summary').html(output);
+
+                    // 2. Processed Image (currently user's uploaded image)
+                  
+                    // 3. Damaged Image (from backend using imageId)
+                    if(res.imageId){
+                        let damagedImgUrl = `https://localhost:7162/api/Container/download/${res.imageId}`;
+                        $("#damaged-img").attr('src', damagedImgUrl).show();
+                    } else {
+                        $("#damaged-img").hide();
+                        $('#damaged-image-placeholder').show();
+                    }
+                },
+                error: function(){
+                    $('#damage-summary').html(
+                        "<span style='color:red;'>Failed to process image. Try a different file.</span>"
+                    );
+                    $("#processed-img").hide();
+                    $('#image-placeholder').show();
+                    $("#damaged-img").hide();
+                    $('#damaged-image-placeholder').show();
                 }
-                $('#damage-summary').html(output);
-
-                var reader = new FileReader();
-                reader.onload = function(e){
-                    $("#processed-img").attr('src', e.target.result).show();
-                }
-                reader.readAsDataURL($("#image-upload")[0].files[0]);
-            },
-            error: function(){
-                $('#damage-summary').html(
-                    "<span style='color:red;'>Failed to process image. Try a different file.</span>"
-                );
-                $("#processed-img").hide();
-                $('#image-placeholder').show();
-            }
+            });
         });
     });
-});
-
-
     </script>
 </body>
 </html>
