@@ -1,6 +1,8 @@
 ﻿namespace api.Controllers
 {
     using api.Model;
+
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +14,7 @@
     {
         [HttpPost("upload")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        
         public async Task<IActionResult> Upload(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -26,6 +29,7 @@
 
             var detail = await containerService.GetContainerDamage(fileBytes);
             var imageId = Guid.NewGuid().ToString();
+            
             var fileName = $"{imageId}.jpg";
             var filePath = Path.Combine("C:\\Apps\\Misc\\", fileName);
             System.IO.File.WriteAllBytes(filePath, detail.DamageImage);
