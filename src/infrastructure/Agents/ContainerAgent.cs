@@ -47,7 +47,7 @@
         public async Task<AgentResponse> Execute(byte[] containerImage)
         {
             string agentReply = string.Empty;
-            //base.UpdateAgent(configuration["ContainerAgentId"], responseFormat);
+            base.UpdateAgent(configuration["ContainerAgentId"], responseFormat);
             var agent = base.GetAzureAgent(configuration["ContainerAgentId"]);
             AgentThread thread = new AzureAIAgentThread(agent.Item2);
             ChatMessageContentItemCollection messages = new();

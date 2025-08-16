@@ -29,11 +29,10 @@
 
             var detail = await containerService.GetContainerDamage(fileBytes);
             var imageId = Guid.NewGuid().ToString();
-            
-            var fileName = $"{imageId}.jpg";
-            var filePath = Path.Combine("C:\\Apps\\Misc\\", fileName);
+            var tempDir = Path.Combine(AppContext.BaseDirectory, "temp");
+            Directory.CreateDirectory(tempDir);
+            var filePath = Path.Combine(tempDir, $"{imageId}.jpg");
             System.IO.File.WriteAllBytes(filePath, detail.DamageImage);
-          
             var response = new ContainerResponseModel
             {
                 Damages = detail.Damage,
@@ -47,8 +46,9 @@
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult DownloadImage(string imageId)
         {
-            var filePath = Path.Combine("C:\\Apps\\Misc\\", imageId);
-            byte[] imageBytes = System.IO.File.ReadAllBytes($"{filePath}.jpg");
+            var tempDir = Path.Combine(AppContext.BaseDirectory, "temp");
+            var filePath = Path.Combine(tempDir, $"{imageId}.jpg");
+            byte[] imageBytes = System.IO.File.ReadAllBytes(filePath);
             return File(imageBytes, "image/jpg", $"{imageId}.jpg");
         }
     }
