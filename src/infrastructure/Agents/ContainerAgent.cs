@@ -1,5 +1,7 @@
 ﻿namespace infrastructure.Agents
 {
+    using Azure.AI.Agents.Persistent;
+
     using Microsoft.Extensions.Configuration;
     using Microsoft.SemanticKernel;
     using Microsoft.SemanticKernel.Agents;
@@ -8,7 +10,7 @@
     using model;
     using System.Text.Json;
     using System.Threading.Tasks;
-    internal class ContainerAgent(Kernel _kernel, IConfiguration configuration) : AgentBase(_kernel, configuration), IContainerAgent
+    internal class ContainerAgent(Kernel _kernel, IConfiguration configuration, PersistentAgentsClient agentsClient) : AgentBase(_kernel, agentsClient), IContainerAgent
     {
         public object responseFormat = new
         {
