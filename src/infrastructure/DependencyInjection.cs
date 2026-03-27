@@ -4,6 +4,7 @@ using Azure.Identity;
 
 using infrastructure.Agents;
 using infrastructure.Predictor;
+using infrastructure.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
@@ -19,7 +20,8 @@ namespace infrastructure
             services
                 .AddSemanticKernel(configuration).
                 AddTransient<IContainerAgent, ContainerAgent>()
-                  .AddTransient<IDamagePredictor, DamagePredictor>().AddAgent(configuration)
+                  .AddTransient<IDamagePredictor, DamagePredictor>()
+                  .AddTransient<IBlobStorageService, BlobStorageService>()
             .Configure<CustomVisionSettings>(configuration.GetSection("CustomVision"));
             return services;
         }
@@ -36,29 +38,6 @@ namespace infrastructure
                 return kernelBuilder.Build();
             });
         }
-        public static IServiceCollection AddAgent(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddScoped(_ =>
-            {
-                var credential = new DefaultAzureCredential(
-                new DefaultAzureCredentialOptions
-                {
-                    ExcludeVisualStudioCredential = true,
-                    ExcludeEnvironmentCredential = true,
-                    ExcludeManagedIdentityCredential = true,
-                    ExcludeInteractiveBrowserCredential = false,
-                    ExcludeAzureCliCredential = false,
-                    ExcludeAzureDeveloperCliCredential = true,
-                    ExcludeAzurePowerShellCredential = true,
-                    ExcludeSharedTokenCacheCredential = true,
-                    ExcludeVisualStudioCodeCredential = true,
-                    ExcludeWorkloadIdentityCredential = true,
-
-                });
-                var projectClient = new AIProjectClient(new Uri(configuration["AgentProjectEndpoint"]), credential);
-                return projectClient.GetPersistentAgentsClient();
-            });
-            return services;
-        }
+        
     }
 }

@@ -2,6 +2,7 @@
 {
     using api.Model;
 
+    using infrastructure.Storage;
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class ContainerController(IContainerService containerService) : ControllerBase
+    public class ContainerController(IContainerService containerService, IBlobStorageService blobStorageService) : ControllerBase
     {
         [HttpPost("upload")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -28,15 +29,13 @@
 
 
             var detail = await containerService.GetContainerDamage(fileBytes);
-            var imageId = Guid.NewGuid().ToString();
-            var tempDir = Path.Combine(AppContext.BaseDirectory, "temp");
-            Directory.CreateDirectory(tempDir);
-            var filePath = Path.Combine(tempDir, $"{imageId}.jpg");
-            System.IO.File.WriteAllBytes(filePath, detail.DamageImage);
+          
+
+
             var response = new ContainerResponseModel
             {
-                Damages = detail.Damage,
-                ImageId = imageId
+                Damages = detail.Item1.Damage,
+                ImageId = detail.Item2
             };
 
             return Ok(response);
@@ -44,11 +43,9 @@
 
         [HttpGet("download/{imageId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult DownloadImage(string imageId)
+        public async Task<IActionResult> DownloadImage(string imageId)
         {
-            var tempDir = Path.Combine(AppContext.BaseDirectory, "temp");
-            var filePath = Path.Combine(tempDir, $"{imageId}.jpg");
-            byte[] imageBytes = System.IO.File.ReadAllBytes(filePath);
+            byte[] imageBytes = await blobStorageService.DownloadImageAsync(imageId);
             return File(imageBytes, "image/jpg", $"{imageId}.jpg");
         }
     }

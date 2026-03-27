@@ -15,46 +15,12 @@
     using System.Threading.Tasks;
     internal class ContainerAgent(Kernel _kernel, IConfiguration configuration) :  IContainerAgent
     {
-        public object responseFormat = new
-        {
-            type = "json_schema",
-            json_schema = new
-            {
-                name = "DamageReport",
-                schema = new
-                {
-                    type = "object",
-                    properties = new
-                    {
-                        Damages = new
-                        {
-                            type = "array",
-                            items = new
-                            {
-                                type = "object",
-                                properties = new
-                                {
-                                    DamageType = new { type = "string" },
-                                    DamageDescription = new { type = "string" },
-                                    PotentialImplications = new { type = "array", items = new { type = "string" } },
-                                    RecommendedActions = new { type = "array", items = new { type = "string" } }
-                                },
-                                required = new[] { "DamageType", "DamageDescription" }
-                            }
-                        }
-                    },
-                    required = new[] { "Damages" }
-                }
-            }
-        };
-
-
         public async Task<AgentResponse> Execute(byte[] containerImage)
         {
             var settings = new AzureOpenAIPromptExecutionSettings()
             {
                 FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
-                ResponseFormat = responseFormat
+                ResponseFormat = typeof(AgentResponse)
                 //MaxTokens=10
 
             };
@@ -65,33 +31,33 @@
                 Name = "ShippingContainerDamageDetectionAgent",
                 Instructions = @"You are a specialized shipping container damage assessment expert. Your task is to analyze images of shipping containers and identify damages.
 
-IMPORTANT: Focus ONLY on areas marked with red rectangles in the image. These rectangles highlight the specific damage areas that need assessment.
-
-For each red rectangle area, provide:
-
-1. **DamageType**: Classify the damage 
-
-2. **DamageDescription**: Provide a detailed description of:
-   - The exact nature and extent of the damage
-   - The location on the container (e.g., front panel, side wall, door, corner, etc.)
-   - The approximate size or severity
-   - Any visible characteristics (depth, width, affected surface area)
-
-3. **PotentialImplications**: List possible consequences, such as:
-   - Structural integrity concerns
-   - Water ingress risk
-   - Security vulnerabilities
-   - Cargo damage risk
-   - Compliance or certification issues
-
-4. **RecommendedActions**: Suggest appropriate responses, such as:
-   - Immediate repair requirements
-   - Inspection recommendations
-   - Usage restrictions
-   - Documentation needs
-   - Priority level (urgent, moderate, low)
-
-Focus exclusively on the damages within the red rectangles. Ignore any other areas of the container. Be precise, professional, and thorough in your assessment. Return your analysis in the specified JSON format.",
+                       IMPORTANT: Focus ONLY on areas marked with red rectangles in the image. These rectangles highlight the specific damage areas that need assessment.
+                       
+                       For each red rectangle area, provide:
+                       
+                       1. **DamageType**: Classify the damage 
+                       
+                       2. **DamageDescription**: Provide a detailed description of:
+                          - The exact nature and extent of the damage
+                          - The location on the container (e.g., front panel, side wall, door, corner, etc.)
+                          - The approximate size or severity
+                          - Any visible characteristics (depth, width, affected surface area)
+                       
+                       3. **PotentialImplications**: List possible consequences, such as:
+                          - Structural integrity concerns
+                          - Water ingress risk
+                          - Security vulnerabilities
+                          - Cargo damage risk
+                          - Compliance or certification issues
+                       
+                       4. **RecommendedActions**: Suggest appropriate responses, such as:
+                          - Immediate repair requirements
+                          - Inspection recommendations
+                          - Usage restrictions
+                          - Documentation needs
+                          - Priority level (urgent, moderate, low)
+                       
+                       Focus exclusively on the damages within the red rectangles. Ignore any other areas of the container. Be precise, professional, and thorough in your assessment. Return your analysis in the specified JSON format.",
                 Kernel = _kernel,
                 Description = "A Shipment agent",
                 Arguments = argument,

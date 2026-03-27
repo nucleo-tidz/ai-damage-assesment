@@ -5,6 +5,6 @@
 
     public interface IContainerService
     {
-        Task<ContainerModel> GetContainerDamage(byte[] containerImage);
+        Task<(ContainerModel, string)> GetContainerDamage(byte[] containerImage);
     }
 }
